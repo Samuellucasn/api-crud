@@ -9,7 +9,7 @@ export const itemsModel = sequelize.define("items", {
         primaryKey: true //chave primaria da coluna
     },
     price: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
         allowNull: false
     },
     name: {

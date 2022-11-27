@@ -3,9 +3,9 @@ import ItemsController from "../controller/ItemsController";
 
 export const router = Express.Router()
 
-router.get('/', ItemsController.listItems)
-router.get('/items', ItemsController.resultItems)
-router.post('/', ItemsController.insertItem)
-router.delete('/items/:Id', ItemsController.deleteItem)
+router.get('/items', ItemsController.listItems)
+router.get('/items/:id', ItemsController.getItem)
+router.post('/items', ItemsController.insertItem)
+router.delete('/items/:id', ItemsController.deleteItem)
 router.delete('/items', ItemsController.deleteAll)
-router.put('/items', ItemsController.updateItems)
+router.put('/items/:id', ItemsController.updateItems)
