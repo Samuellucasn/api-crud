@@ -7,9 +7,10 @@ class itemsController{
             const list = await itemsModel.findAll({
                 attributes: ['price', 'name']
             })
-            res.send(list)
-        } catch (error) {
-            console.log(error)
+            return res.status(200).send(list)
+        } catch (error: any) {
+            const erroMessage = error.parent.sqlMessage
+            res.status(401).send("ERRO 404 " + erroMessage)
         }
     }
     
@@ -18,25 +19,30 @@ class itemsController{
 
         try{
             const item = await itemsModel.findAll({
-                attributes: [id]
+                attributes: ['id', 'price', 'name'],
+                where : {
+                    id: id
+                }
             })
-            res.send(item)
-        } catch (error) {
-            console.log(error)
+            return res.status(200).send(item)
+        } catch (error: any) {
+            const erroMessage = error.parent.sqlMessage
+            res.status(401).send("ERRO 404 " + erroMessage)
         }
     }
     
     async insertItem(req: Request, res: Response) {
-        const {price, name}= req.body // pega os valores
-        try { await itemsModel.create( //create do sequelize cria a tabela de valores
+        const {price, name}= req.body 
+        try { await itemsModel.create(
             {
                 price,
                 name
-            }
-        )} catch (error) {
-            console.log(error)
+            })
+            return res.status(201)
+        } catch (error: any) {
+            const erroMessage = error.parent.sqlMessage
+            res.status(400).send("ERRO 400 " + erroMessage)
         }
-        res.status(200).send("aqui o seu " + price + name)
     }
     
     async deleteItem(req: Request, res: Response) {
@@ -48,32 +54,36 @@ class itemsController{
                     id: id
                 }
             })
-            res.send(req.params)
-        } catch (error) {
-            console.log(error)
+            return res.status(204)
+        } catch (error: any) {
+            const erroMessage = error.parent.sqlMessage
+            res.status(404).send("ERRO 404 " + erroMessage)
         }
     }
 
     async deleteAll(req: Request, res: Response) {
         try {
             await itemsModel.destroy({
-                truncate: true // to destroy everything
+                truncate: true 
             })
-            res.send("ok")
-        } catch (error) {
-            console.log(error)
+            return res.status(204)
+        } catch (error: any) {
+            const erroMessage = error.parent.sqlMessage
+            res.status(404).send("ERRO 404 " + erroMessage)
         }
     }
     
     async updateItems(req: Request, res: Response) {
         const {id} = req.params
+        
         try {
             await itemsModel.update(req.body, {
                 where : { id : id }
             })
-            res.send("foi")
-        } catch (error) {
-            console.log(error)
+            return res.status(204)
+        } catch (error: any) {
+            const erroMessage = error.parent.sqlMessage
+            res.status(404).send("ERRO 404 " + erroMessage)
         }
     }
 }
